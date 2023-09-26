@@ -103,6 +103,7 @@ public class SkinEntryController {
             setMinWidth(320);
             setMinHeight(300);
             setTitle("Change skin");
+            getIcons().add(App.icon);
             ((ChangeSkinController) fxmlLoader.getController()).init(src, preview);
             setScene(scene);
         }

@@ -154,6 +154,7 @@ public class AppController {
             setMinWidth(320);
             setMinHeight(300);
             setTitle("Authentication");
+            getIcons().add(App.icon);
             setScene(scene);
         }
     }

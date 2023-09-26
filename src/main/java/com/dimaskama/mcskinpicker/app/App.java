@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import net.hycrafthd.minecraft_authenticator.login.AuthenticationFile;
 import net.hycrafthd.minecraft_authenticator.login.Authenticator;
@@ -16,16 +17,20 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class App extends Application {
+    public static Image icon;
     public static AppController controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        icon = new Image("com/dimaskama/mcskinpicker/app/icon.png");
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("main-screen.fxml"));
         primaryStage.setScene(new Scene(loader.load(), 800, 600));
         primaryStage.setMinWidth(400);
         primaryStage.setMinHeight(300);
         controller = loader.getController();
         primaryStage.setTitle("MCSkinPicker");
+        primaryStage.getIcons().add(icon);
         primaryStage.show();
 
         Task<Void> task = new Task<>() {
