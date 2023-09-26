@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane minWidth="200.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dimaskama.mcskinpicker.app.SkinEntryController">
+   <children>
+      <HBox alignment="CENTER_LEFT" prefHeight="100.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="preview" fitHeight="64.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+               <HBox.margin>
+                  <Insets left="10.0" />
+               </HBox.margin>
+            </ImageView>
+            <Label fx:id="name" text="Name">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox spacing="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="36.0">
+         <children>
+            <TextField fx:id="newName" onAction="#onNewName" promptText="New name" visible="false" />
+            <Button mnemonicParsing="false" onAction="#onUse" text="Use" />
+            <Button mnemonicParsing="false" onAction="#onRename" text="Rename" />
+            <Button mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
