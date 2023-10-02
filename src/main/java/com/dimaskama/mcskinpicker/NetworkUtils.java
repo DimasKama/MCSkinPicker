@@ -1,6 +1,9 @@
 package com.dimaskama.mcskinpicker;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.apache.http.Header;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -18,25 +21,26 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Map;
+import java.net.URL;
 
 public class NetworkUtils {
-    @SuppressWarnings("unchecked")
+
     public static void updateProfileInfo() {
         if (Main.getAuth() == null || Main.getAuth().getUser().isEmpty()) return;
         try (CloseableHttpClient client = HttpClients.createDefault()) {
             HttpGet get = new HttpGet("https://api.minecraftservices.com/minecraft/profile");
             get.addHeader(getAuthHeader());
             Gson gson = new Gson();
-            Map<String, Object> map = client.execute(get, response -> gson.fromJson(new InputStreamReader(response.getEntity().getContent()), Map.class));
-            String skinURL = (String) ((ArrayList<Map<String, Object>>) map.get("skins")).get(0).get("url");
-            HttpGet getSkin = new HttpGet(skinURL);
-            Main.currentSkin = client.execute(getSkin, response -> ImageIO.read(response.getEntity().getContent()));
-            ArrayList<Map<String, Object>> capes = (ArrayList<Map<String, Object>>) map.get("capes");
+            JsonObject response = client.execute(get, r -> gson.fromJson(new InputStreamReader(r.getEntity().getContent()), JsonObject.class));
+            Main.currentSkin = ImageIO.read(new URL(response.getAsJsonArray("skins").get(0).getAsJsonObject().get("url").getAsString()));
+            JsonArray capes = response.getAsJsonArray("capes");
             Main.capes.clear();
-            for (Map<String, Object> cape : capes)
-                Main.capes.add(new Main.Cape((String) cape.get("alias"), (String) cape.get("id"), ((String) cape.get("state")).equalsIgnoreCase("ACTIVE")));
+            for (JsonObject cape : capes.asList().stream().map(JsonElement::getAsJsonObject).toList())
+                Main.capes.add(new Main.Cape(
+                        cape.getAsJsonPrimitive("alias").getAsString(),
+                        cape.getAsJsonPrimitive("id").getAsString(),
+                        cape.getAsJsonPrimitive("state").getAsString().equalsIgnoreCase("ACTIVE")
+                ));
         } catch (IOException | NullPointerException e) {
             Main.LOGGER.error(e);
         }
